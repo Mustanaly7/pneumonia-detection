@@ -7,6 +7,19 @@ from PIL import Image
 st.title("Pneumonia Detection from Chest X-Rays")
 st.write("Upload a chest X-ray image to detect the presence of pneumonia.")
 
+hide_icons_css = """
+<style>
+/* Hides the top-right menu and cloud deployment icons */
+header {
+    visibility: hidden;
+}
+#MainMenu {
+    visibility: hidden;
+}
+</style>
+"""
+st.markdown(hide_icons_css, unsafe_allow_html=True)
+
 @st.cache_resource
 def load_model():
     model = models.mobilenet_v2(weights=None)
@@ -29,7 +42,7 @@ uploaded_file = st.file_uploader("Choose an X-ray image...", type=["jpg", "jpeg"
 if uploaded_file is not None:
     image = Image.open(uploaded_file).convert('RGB')
     st.image(image, caption='Uploaded X-ray', use_container_width=True)    
-    
+
     input_tensor = transform(image).unsqueeze(0)
     
     with torch.no_grad():
